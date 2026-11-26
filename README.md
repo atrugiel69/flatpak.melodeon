@@ -1,10 +1,10 @@
 # flatpak.melodeon
 
-Standalone Kodi launcher add-on for running the Melodeon Flatpak on LibreELEC via Wayland (`labwc`).
+Standalone Kodi launcher add-on for running the [Melodeon](https://github.com/CDrummond/melodeon) Flatpak on LibreELEC via Wayland (`labwc`).
 
 ## Requirements
 - LibreELEC with `tools.flatpak` and `tools.externalhelper` installed
-- Melodeon installed via Flatpak
+- [Melodeon](https://github.com/CDrummond/melodeon) installed via Flatpak
 
 ## Packaging the Kodi `.zip`
 Run from the parent directory so `flatpak.melodeon/` is the archive root:
@@ -40,3 +40,6 @@ zip -r flatpak.melodeon-1.0.0.zip flatpak.melodeon \
    XCURSOR_SIZE=64
    EOV
    ```
+
+## Acknowledgements
+Special thanks to Craig Drummond ([CDrummond](https://github.com/CDrummond)) for creating and maintaining [Melodeon](https://github.com/CDrummond/melodeon)—without his work, this add-on would not exist.
