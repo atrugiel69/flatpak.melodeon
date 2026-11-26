@@ -1,0 +1,32 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+# Ensure Multimedia Tools and /storage/.local/bin are in PATH inside transient systemd units
+for d in /storage/.local/bin /storage/.kodi/addons/*/bin; do
+  [ -d "$d" ] && PATH="$d:$PATH"
+done
+export PATH
+
+SQUEEZELITE_PID=""
+
+cleanup() {
+  if [ -n "${SQUEEZELITE_PID}" ] && kill -0 "${SQUEEZELITE_PID}" 2>/dev/null; then
+    kill "${SQUEEZELITE_PID}" 2>/dev/null
+    wait "${SQUEEZELITE_PID}" 2>/dev/null
+  fi
+}
+
+trap cleanup EXIT INT TERM
+
+if [ "${MELODEON_SQUEEZELITE_ENABLE:-1}" = "1" ]; then
+  SQUEEZELITE_CMD="${MELODEON_SQUEEZELITE_BIN:-squeezelite}"
+  if command -v "${SQUEEZELITE_CMD}" >/dev/null 2>&1 || [ -x "${SQUEEZELITE_CMD}" ]; then
+    # Use eval so quoted arguments like -n "gELEC" are preserved intact
+    eval "\"${SQUEEZELITE_CMD}\" ${MELODEON_SQUEEZELITE_ARGS}" >/var/log/squeezelite-melodeon.log 2>&1 &
+    SQUEEZELITE_PID=$!
+  else
+    echo "melodeon-wrapper: squeezelite binary not found: ${SQUEEZELITE_CMD}" >&2
+  fi
+fi
+
+/storage/.kodi/addons/tools.flatpak/bin/flatpak-run-wrapper "$@"
